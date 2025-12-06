@@ -9,4 +9,18 @@ typedef struct {
     uint32_t original_index;
 } tagged_int_t;
 
+//Generate data for testing
+void gen_random_ints(uint32_t *arr, size_t n);
+void gen_sorted_ints(uint32_t *arr, size_t n);
+void gen_reversed_ints(uint32_t *arr, size_t n);
+void gen_floats(float *arr, size_t n);
+void gen_stability_data(tagged_int_t *arr, size_t n);
 
+//Verifying helper functions
+void verify_sorted(uint32_t *arr, size_t n);
+void verify_floats(float *arr, size_t n);
+void verify_stability(tagged_int_t *arr, size_t n);
+
+double get_time_sec();
+
+#endif
