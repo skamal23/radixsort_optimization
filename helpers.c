@@ -1,5 +1,6 @@
 #include "helpers.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 #include <string.h>
 
@@ -7,8 +8,8 @@ void gen_random_ints(uint32_t *arr, size_t n) {
     srand(42);
     for(size_t i=0;i<n;i++){
         uint32_t random_int = rand();
-        r=(r<<16)|rand();
-        a[i]=r;
+        random_int=(random_int<<16)|rand();
+        arr[i]=random_int;
     }
 }
 
@@ -18,7 +19,7 @@ void gen_sorted_ints(uint32_t *arr, size_t n) {
     }
 }
 
-void gen_reversed_ints(uint32_t *arr, size_t n) {
+void gen_reverse_ints(uint32_t *arr, size_t n) {
     for(size_t i=0;i<n;i++){
         arr[i]=(uint32_t)(n-1-i);
     }
@@ -40,3 +41,45 @@ void gen_stability_data(tagged_int_t *arr, size_t n){
     }
 }
 
+//Verifying helper functions
+void verify_sorted(uint32_t *arr, size_t n){
+    for(size_t i=1;i<n;i++){
+        if(arr[i-1]>arr[i]){
+            fprintf(stderr,"Integer array is not sorted\n");
+            exit(1);
+        }
+    }
+    printf("The integer array is sorted\n");
+}
+
+void verify_floats(float *arr, size_t n){
+    for(size_t i=1;i<n;i++){
+        if(arr[i]<arr[i-1]){
+            fprintf(stderr,"Float array is not sorted\n");
+            exit(1);
+        }
+    }
+    printf("The float array is sorted\n");
+}
+
+void verify_stability(tagged_int_t *arr, size_t n){
+    for(size_t i=1;i<n;i++){
+        if(arr[i].key<arr[i-1].key){
+            fprintf(stderr,"Stability check failed at index %zu: %u < %u\n",i,arr[i].key,arr[i-1].key);
+            exit(1);
+        }
+        if(arr[i].key==arr[i-1].key){
+            if(arr[i].original_index<arr[i-1].original_index){
+                fprintf(stderr,"Stability check failed at index %zu: %u < %u\n",i,arr[i].original_index,arr[i-1].original_index);
+                exit(1);
+            }
+        }
+    }
+    printf("The stability data is stable\n");
+}
+
+double get_time_sec(){
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC,&ts);
+    return ts.tv_sec + ts.tv_nsec * 1e-9;
+}
