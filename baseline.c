@@ -39,3 +39,53 @@ void sort_array(uint32_t *arr, size_t size){
     }
     free(output);
 }
+
+int main(int argc, char **argv){
+    size_t size=100000000; //100 million integers
+    if(argc>1){
+        size=atoi(argv[1]);
+    }
+    if(argc>2){
+        dist_mode = argv[2];
+    }
+    printf("Running the baseline LSD radix sort on %zu integers\n",size);
+    uint32_t *arr=malloc(size*sizeof(uint32_t));
+    if(!arr){
+        perror("malloc failed");
+        exit(1);
+    }
+    printf("Generating random integers");
+    if(strcmp(dist_mode,"random")==0){
+        gen_random_ints(arr,size);
+    }
+    else if(strcmp(dist_mode,"sorted")==0){
+        gen_sorted_ints(arr,size);
+    }
+    else if(strcmp(dist_mode,"reverse")==0){
+        gen_reverse_ints(arr,size);
+    }
+    else if(strcmp(dist_mode,"float")==0){
+        //This will fail on negative floats
+        gen_floats((float*)arr,size);
+    }
+    else if(strcmp(dist_mode,"stability")==0){
+        gen_stability_data(arr,size);
+    }
+    else{
+        fprintf(stderr,"Unknown distribution mode: %s\n",dist_mode);
+        exit(1);
+    }
+    printf("Sorting...");
+    double start_time=get_time_sec();
+    sort_array(arr,size);
+    double end_time=get_time_sec();
+    printf("Sorting took %.4f seconds\n",end_time-start_time);
+    if(strcmp(dist_mode,"float")==0){
+        verify_floats((float*)arr,size);
+    }
+    else{
+        verify_sorted(arr,size);
+    }
+    free(arr);
+    return 0;
+}
