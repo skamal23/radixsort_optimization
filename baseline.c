@@ -65,8 +65,10 @@ int main(int argc, char **argv){
         gen_reverse_ints(arr,size);
     }
     else if(strcmp(dist_mode,"float")==0){
-        //This will fail on negative floats
         gen_floats((float*)arr,size);
+        for(size_t i=0;i<size;i++){
+            arr[i]=float_to_sortable(arr[i]);
+        }
     }
     else if(strcmp(dist_mode,"stability")==0){
         gen_stability_data(arr,size);
@@ -81,6 +83,9 @@ int main(int argc, char **argv){
     double end_time=get_time_sec();
     printf("Sorting took %.4f seconds\n",end_time-start_time);
     if(strcmp(dist_mode,"float")==0){
+        for(size_t i=0;i<size;i++){
+            arr[i]=sortable_to_float(arr[i]);
+        }
         verify_floats((float*)arr,size);
     }
     else{

@@ -23,4 +23,7 @@ void verify_stability(tagged_int_t *arr, size_t n);
 
 double get_time_sec();
 
+uint32_t float_to_sortable(uint32_t u);
+uint32_t sortable_to_float(uint32_t u);
+
 #endif

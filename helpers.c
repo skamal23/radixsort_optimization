@@ -83,3 +83,15 @@ double get_time_sec(){
     clock_gettime(CLOCK_MONOTONIC,&ts);
     return ts.tv_sec + ts.tv_nsec * 1e-9;
 }
+
+uint32_t float_to_sortable(uint32_t u){
+    //Convert float to uint32_t in IEEE 754 format
+    uint32_t mask = (-(int32_t)(u >>31)) | 0x80000000;
+    return u ^ mask;
+}
+
+uint32_t sortable_to_float(uint32_t u) {
+    // Inverse operation to restore original float bits
+    uint32_t mask = ((u >> 31) - 1) | 0x80000000;
+    return u ^ mask;
+}
