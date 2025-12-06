@@ -12,7 +12,7 @@ typedef struct {
 //Generate data for testing
 void gen_random_ints(uint32_t *arr, size_t n);
 void gen_sorted_ints(uint32_t *arr, size_t n);
-void gen_reversed_ints(uint32_t *arr, size_t n);
+void gen_reverse_ints(uint32_t *arr, size_t n);
 void gen_floats(float *arr, size_t n);
 void gen_stability_data(tagged_int_t *arr, size_t n);
 

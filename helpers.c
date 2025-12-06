@@ -6,10 +6,12 @@
 
 void gen_random_ints(uint32_t *arr, size_t n) {
     srand(42);
-    for(size_t i=0;i<n;i++){
-        uint32_t random_int = rand();
-        random_int=(random_int<<16)|rand();
-        arr[i]=random_int;
+    for(size_t i = 0; i < n; i++) {
+        uint32_t r = (rand() & 0xFF) | 
+                     ((rand() & 0xFF) << 8) | 
+                     ((rand() & 0xFF) << 16) | 
+                     ((rand() & 0xFF) << 24);
+        arr[i] = r;
     }
 }
 

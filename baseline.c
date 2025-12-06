@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdint.h>
 #include "helpers.h"
 //This is the naive, baseline LSD radix sort implementation that sorts 32-bit integers
@@ -21,7 +22,7 @@ void sort_array(uint32_t *arr, size_t size){
             count[key]++;
         }
         //Prefix sum
-        total=0;
+        size_t total=0;
         for(int i=0;i<256;i++){
             size_t temp=count[i];
             count[i]=total;
@@ -42,6 +43,7 @@ void sort_array(uint32_t *arr, size_t size){
 
 int main(int argc, char **argv){
     size_t size=100000000; //100 million integers
+    char *dist_mode = "random";
     if(argc>1){
         size=atoi(argv[1]);
     }
@@ -54,7 +56,7 @@ int main(int argc, char **argv){
         perror("malloc failed");
         exit(1);
     }
-    printf("Generating random integers");
+    printf("Generating dataset");
     if(strcmp(dist_mode,"random")==0){
         gen_random_ints(arr,size);
     }
@@ -69,9 +71,6 @@ int main(int argc, char **argv){
         for(size_t i=0;i<size;i++){
             arr[i]=float_to_sortable(arr[i]);
         }
-    }
-    else if(strcmp(dist_mode,"stability")==0){
-        gen_stability_data(arr,size);
     }
     else{
         fprintf(stderr,"Unknown distribution mode: %s\n",dist_mode);
