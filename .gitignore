@@ -3,3 +3,4 @@ sorting
 *.o
 *.out
 .DS_Store
+deprecated/

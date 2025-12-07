@@ -7,8 +7,8 @@
 #include <sched.h>
 #include "helpers.h"
 
-//By processing in 256KB blocks, we can fit the data in the L2 cache
-#define L2_CHUNK (64 * 1024) 
+//Process in 8MB blocks to take advantage of L3 cache.
+#define L2_CHUNK (2048 * 1024)
 
 //We pin thread to core to prevent migrating threads to different cores and cold caches
 void pin_thread_to_core(int id) {
@@ -36,9 +36,7 @@ void sort_array(uint32_t *arr,size_t size,uint32_t *workspace) {
         
         #pragma omp parallel for schedule(static)
         for (size_t b=0;b<num_blocks;b++){
-            for (int k=0; k<256;k++){
-                block_offsets[b][k] = 0;
-            }
+            memset(block_offsets[b], 0, 256 * sizeof(size_t));
             size_t start=b*L2_CHUNK;
             size_t end =start+L2_CHUNK;
             if (end>size){
