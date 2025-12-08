@@ -8,7 +8,7 @@
 #include "helpers.h"
 
 //Process in 8MB blocks to take advantage of L3 cache.
-#define L2_CHUNK (2048 * 1024)
+#define L2_CHUNK (2097152)
 
 //We pin thread to core to prevent migrating threads to different cores and cold caches
 void pin_thread_to_core(int id) {
@@ -63,6 +63,7 @@ void sort_array(uint32_t *arr,size_t size,uint32_t *workspace) {
             }
             size_t *offsets=block_offsets[b];
             for (size_t i=start; i<end;i++) {
+                __builtin_prefetch(&in[i + 64], 0, 0);
                 out[offsets[(in[i]>>shift) & 0xFF]++]=in[i];
             }
         }
